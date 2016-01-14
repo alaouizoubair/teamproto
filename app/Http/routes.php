@@ -11,17 +11,18 @@
 |
 */
 
-Route::get('/', function () {
-    return view('pages/home');
-});
+Route::get('/', 'Auth\AuthController@getLogin');
+Route::get('home', ['as'=>'article.index','uses' => 'ArticleController@index']);
 
 Route::group(['middleware' => 'auth'],function(){
+	Route::resource('article','ArticleController',['only'=>['index','store','show','update','destroy']]);
+	Route::post('article/recherche',['as'=>'article.recherche','uses' => 'ArticleController@recherche']);
+	Route::get('article/recherche',['as'=>'article.recherche','uses' => 'ArticleController@index']);
+	Route::get('article/duplicate/{article}',['as'=>'article.duplicate','uses' => 'ArticleController@duplicate']);
 
-	Route::get('/offre', 'OffresController@offre');
-
-
-	Route::get('ajax/offreSearch',['as'=>'ajax.offreSearch','uses'=>'OffresController@offreSearch']);
-	Route::get('ajax/offreSearchValide',['as'=>'ajax.offreSearchValide','uses'=>'OffresController@offreSearchValide']);
+	Route::resource('client','ClientController',['only'=>['index','store']]);
+	
+	//Route::resource('client','ClientController',['only'=>['index']]);
 
 });
 
@@ -31,10 +32,12 @@ Route::group(['middleware' => 'auth'],function(){
 
 // Authentication routes...
 Route::get('auth/login', 'Auth\AuthController@getLogin');
-Route::post('auth/login', ['as'=>'auth.login', 'uses'=> 'Auth\AuthController@postLogin']);
+Route::post('auth/login', 'Auth\AuthController@postLogin');
 Route::get('auth/logout', 'Auth\AuthController@getLogout');
 
 // Registration routes...
 Route::get('auth/register', 'Auth\AuthController@getRegister');
 Route::post('auth/register', 'Auth\AuthController@postRegister');
+
+
 

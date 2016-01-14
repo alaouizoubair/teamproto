@@ -7,7 +7,7 @@
 
     <link rel="icon" href="../../favicon.ico">
 
-    <title>Location Ordinateur</title>
+    <title>Store Project With Laravel</title>
 
     <!-- Bootstrap core CSS -->
     {!! HTML::style('css/bootstrap.css') !!}
@@ -24,9 +24,6 @@
     <!-- Side Menu Style -->
     {!! HTML::style('css/sidemenu.css') !!}
     {!! HTML::script('js/script.js') !!}
-
-    <!-- Google Fonts -->
-    {!! HTML::style('https://fonts.googleapis.com/css?family=Raleway:200,400|Khula') !!}
   </head>
 
   <body>
@@ -41,45 +38,63 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">LOCORDI</a>
+          <a class="navbar-brand" href="#">TEAM COBHAM</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Accueil</a></li>
-            <li><a href="#dossier">Profile</a></li>
+            <li><a href="#dossier">Dossier</a></li>
+            <li><a href="{{ url('client') }}">Client</a></li>
+            <li><a href="{{ url('article') }}">Article</a></li>
+            <li><a href="#client">Composant</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
-            @if(!Auth::check())
-                <li><a href="" data-toggle="modal" data-target="#login-mdl">Login</a></li>
-                <li><a href="" data-toggle="modal" data-target="#register-mdl">Register</a></li>
-              @else
-                <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
-              @endif
+          @if(!Auth::check())
+            <li><a href="{{ action('Auth\AuthController@getLogin') }}">Login</a></li>
+            <li><a href="{{ action('Auth\AuthController@getRegister') }}">Register</a></li>
+          @else
+            <li><a href="{{ action('Auth\AuthController@getLogout') }}">Logout</a></li>
+          @endif
           </ul>
         </div><!--/.nav-collapse -->
       </div>
     </nav>
 
 
-    <div class="container" style="margin-top:100px;">
+    <div class="container" style="margin-top:50px;">
       
-      <div class="col-sm-12">
-          @yield('content') 
+      <div class="col-sm-8">
+          @yield('content')
+
       </div>
 
+      <div class="col-sm-4">
+
+          @yield('sidebar')
+      </div> 
+
     </div><!-- /.container -->
-    
-    @if(!Auth::check())
-      @include('includes/login')
-      @include('includes/register')
-    @endif
-    
-    <!-- Angular Libarary -->
-    {!! HTML::script('js/angular.js') !!}
-    {!! HTML::script('js/angular-route.js') !!} 
-    
-    <!-- Angular Controller Libarary -->
-    {!! HTML::script('js/angularController.js') !!}
+
+
+    @include('includes/errors')
+    @include('includes/validations')
+
+    <script type="text/javascript">
+      var menuLeft = document.getElementById( 'cbp-spmenu-s1' ),
+        body = document.body;
+
+      showLeft.onclick = function() {
+        classie.toggle( this, 'active' );
+        classie.toggle( menuLeft, 'cbp-spmenu-open' );
+        disableOther( 'showLeft' );
+      };
+
+      function disableOther( button ) {
+        if( button !== 'showLeft' ) {
+          classie.toggle( showLeft, 'disabled' );
+        }
+      }
+    </script>
 </body>
 </html>
